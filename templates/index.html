@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+	<title>Homepage</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Home</h1>
+
+    <p>Welcome, Client!</p>
+
+    <h2>Now we have:</h2>
+    <ul>
+        <li><strong>Companies:</strong> {{ companies }}</li>
+        <li><strong>Equipment:</strong> {{ equipments }}</li>
+        <li><strong>Reviews:</strong> {{ reviews }}</li>
+    </ul>
+
+{% endblock %}

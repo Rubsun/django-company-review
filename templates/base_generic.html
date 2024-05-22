@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}<title>Library</title>{% endblock %}
+</head>
+
+<body>
+{% block sidebar %}
+    <ul class="sidebar-nav">
+        <li>
+            <form method="post" action="{% url 'homepage' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link">Homepage</button>
+            </form>
+        </li>
+        {% if user.is_authenticated %}
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link">Log out</button>
+                </form>
+            </li>
+            <li>
+                <form method="get" action="{% url 'companies' %}">
+                    <button type="submit">Companies</button>
+                </form>
+            </li>
+            <li>
+                <form method="get" action="{% url 'profile' %}">
+                    <button type="submit">Profile</button>
+                </form>
+            </li>
+            <li>
+                <form method="get" action="{% url 'equipments' %}">
+                    <button type="submit">All Equipment</button>
+                </form>
+            </li>
+
+        {% else %}
+            <li>
+                <form method="get" action="{% url 'register' %}">
+                    <button type="submit">Sign up</button>
+                </form>
+            </li>
+            <li>
+                <form method="get" action="{% url 'login' %}">
+                    <button type="submit">Log in</button>
+                </form>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}
+{% block content %}
+{% endblock %}
+</body>
+</html>

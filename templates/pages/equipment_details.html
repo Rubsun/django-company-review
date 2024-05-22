@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+	<title>Equipment Details</title>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Equipment Details</h1>
+    <p><strong>Title:</strong> {{ equipment.title }}</p>
+    <p><strong>Size:</strong> {{ equipment.size }}</p>
+    <p><strong>Category:</strong> {{ equipment.category.title }}</p>
+
+    <h2>Reviews:</h2>
+    <ul>
+        {% for review in reviews %}
+        <li>
+            <p><strong>Review by:</strong> {{ review.client.username }}</p>
+            <p>{{ review.text }} - Rating: {{ review.rating }}</p>
+        </li>
+        {% empty %}
+        <li>No reviews yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Write a Review:</h2>
+    <form method="post" action="{% url 'equipment_view' equipment.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Review</button>
+    </form>
+
+
+{% endblock %}
+

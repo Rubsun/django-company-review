@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+{% block title %}
+	<title>Equipments</title>
+{% endblock %}
+
+{% block content %}
+	
+    <h1>All Equipment</h1>
+    <ul>
+        {% for equipment in equipments %}
+        <li>
+            <p><strong>Title:</strong> {{ equipment.title }}</p>
+            <p><strong>Size:</strong> {{ equipment.size }}</p>
+            <p><strong>Category:</strong> {{ equipment.category.title }}</p>
+            <form method="get" action="{% url 'equipment_view' equipment.id %}">
+                <button type="submit">View Details</button>
+            </form>
+        </li>
+        {% empty %}
+        <li>No equipment found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
