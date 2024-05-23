@@ -5,7 +5,7 @@ from django import forms
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from companies_app.models import Review
+from companies_app.models import Review, Company, Equipment
 
 
 class RegistrationForm(UserCreationForm):
@@ -27,3 +27,15 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['text', 'rating']
+
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['title', 'phone', 'address']
+
+
+class EquipmentForm(forms.ModelForm):
+    class Meta:
+        model = Equipment
+        fields = ['title', 'size', 'category']

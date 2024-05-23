@@ -63,18 +63,33 @@ class ModifiedMixin(models.Model):
 class Company(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False)
     phone = models.TextField(_('phone'), null=False, blank=False, validators=[check_valid_phone])
-    address = models.TextField(_('address'), null=False, blank=False)
-
+    address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name=_('adress'), null=True, blank=True)
     equipments = models.ManyToManyField('Equipment', verbose_name=_('equipments'), through='CompanyEquipment')
 
     def __str__(self):
-        return f'{self.title}: {self.phone}, {self.address}'
+        return f'{self.title}: {self.phone} '
 
     class Meta:
         db_table = '"companies_schema"."company"'
         ordering = ['title', 'phone', 'address']
         verbose_name = _('company')
         verbose_name_plural = _('companies')
+
+class Address(CreatedMixin, ModifiedMixin, UUIDMixin):
+    street_name = models.TextField(_('street name'), max_length=255, null=False, blank=False)
+    city = models.TextField(_('city'), max_length=50, null=False, blank=False)
+    state = models.TextField(_('state'), max_length=50, null=False, blank=False)
+    house_number = models.PositiveIntegerField(_('house number'), default=None, null=False, blank=False)
+
+    def __str__(self):
+        return self.street_name
+
+    class Meta:
+        db_table = '"companies_schema"."address"'
+        ordering = ['street_name', 'city', 'state', 'house_number']
+        verbose_name = _('address')
+        verbose_name_plural = _('addresses')
+
 
 class Category(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False)
@@ -94,6 +109,7 @@ class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
     size = models.IntegerField(_('size'), null=True, blank=True, validators=[MinValueValidator(0)])
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'), related_name='equipments')
     companies = models.ManyToManyField('Company', verbose_name=_('companies'), through='CompanyEquipment')
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self):
         return f'{self.category}: {self.title}, {self.size}'
@@ -170,7 +186,3 @@ class Client(UUIDMixin, ModifiedMixin, CreatedMixin):
         db_table = '"companies_schema"."client"'
         verbose_name = _('client')
         verbose_name_plural = _('client')
-
-
-
-

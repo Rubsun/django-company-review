@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import permissions, viewsets
-
-from .forms import RegistrationForm, ReviewForm
-from .models import Company, Equipment, Review, Client
+from django.contrib import messages
+from .forms import RegistrationForm, ReviewForm, CompanyForm, EquipmentForm
+from .models import Company, Equipment, Review, Client, CompanyEquipment
 from .serializers import CompanySerializer, ReviewSerializer, EquipmentSerializer
 
 
@@ -77,6 +77,19 @@ def profile_view(request):
 
 
 @login_required
+def profile_view_by_id(request, user_id):
+    client = get_object_or_404(Client, user_id=user_id)
+    reviews = Review.objects.filter(client=client)
+
+    context = {
+        'client': client,
+        'reviews': reviews,
+    }
+    return render(request, 'pages/profile.html', context)
+
+
+
+@login_required
 def equipments_view(request):
     equipments = Equipment.objects.all()
     context = {
@@ -103,7 +116,7 @@ def company_detail_view(request, company_id):
     return render(request, 'pages/company_detail.html', context)
 
 
-@login_required()
+@login_required
 def equipment_view(request, equipment_id):
     equipment = get_object_or_404(Equipment, id=equipment_id)
     reviews = equipment.reviews.select_related('client__user').all()
@@ -119,12 +132,85 @@ def equipment_view(request, equipment_id):
     else:
         form = ReviewForm()
 
+    companies = Company.objects.all()
+
     context = {
         'equipment': equipment,
         'reviews': reviews,
         'form': form,
+        'companies': companies,
     }
     return render(request, 'pages/equipment_details.html', context)
 
 
 
+
+@login_required
+def create_company(request):
+    if request.method == 'POST':
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            company = form.save()
+            return redirect('company_detail', company.id)
+    else:
+        form = CompanyForm()
+    return render(request, 'pages/create_company.html', {'form': form})
+
+
+@login_required
+def create_equipment(request):
+    if request.method == 'POST':
+        form = EquipmentForm(request.POST)
+        if form.is_valid():
+            equipment = form.save(commit=False)
+            equipment.client = request.user.client
+            equipment = form.save()
+            return redirect('equipment_view', equipment.id)
+    else:
+        form = EquipmentForm()
+    return render(request, 'pages/create_equipment.html', {'form': form})
+
+@login_required
+def add_equipment_to_company(request, equipment_id):
+    if request.method == 'POST':
+        equipment = get_object_or_404(Equipment, id=equipment_id)
+        company_id = request.POST.get('company_id')
+        company = get_object_or_404(Company, id=company_id)
+        
+        if CompanyEquipment.objects.filter(equipment=equipment, company=company).exists():
+            messages.warning(request, 'This equipment is already associated with the selected company.')
+        else:
+            CompanyEquipment.objects.create(equipment=equipment, company=company)
+            messages.success(request, 'Equipment successfully added to the company.')
+        
+        return redirect('equipment_view', equipment_id=equipment.id)
+    
+    return redirect('equipment_view', equipment_id=equipment_id)
+
+@login_required
+def delete_equipment(request, equipment_id):
+    equipment = get_object_or_404(Equipment, id=equipment_id)
+    if equipment.client != request.user:
+        messages.error(request, 'You do not have permission to delete this equipment.')
+        return redirect('equipment_view', equipment_id=equipment_id)
+    
+    if request.method == 'POST':
+        equipment.delete()
+        messages.success(request, 'Equipment deleted successfully.')
+        return redirect('equipments')
+    
+    return render(request, 'pages/equipment_details.html', {'equipment': equipment})
+
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.client != request.user:
+        messages.error(request, 'You do not have permission to delete this review.')
+        return redirect('profile')
+    
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Review deleted successfully.')
+    
+    return redirect('profile')

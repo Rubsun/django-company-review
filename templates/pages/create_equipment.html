@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+    <title>Create Equipment</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Create Equipment</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Equipment</button>
+    </form>
+{% endblock %}
