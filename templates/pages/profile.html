@@ -17,6 +17,9 @@
             <form method="get" action="{% url 'equipment_view' review.equipment_id %}">
                 <button type="submit">View Details</button>
             </form>
+            <form method="get" action="{% url 'delete_review' review.review_id %}">
+                <button type="submit">Delete</button>
+            </form>
         {% endfor %}
     </ul>
 {% endblock %}

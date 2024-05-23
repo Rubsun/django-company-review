@@ -35,6 +35,17 @@
                     <button type="submit">All Equipment</button>
                 </form>
             </li>
+            <li>
+                <form method="get" action="{% url 'create_company' %}">
+                    <button type="submit">Create company</button>
+                </form>
+            </li>
+            <li>
+                <form method="get" action="{% url 'create_equipment' %}">
+                    <button type="submit">Create equipment</button>
+                </form>
+            </li>
+            
 
         {% else %}
             <li>

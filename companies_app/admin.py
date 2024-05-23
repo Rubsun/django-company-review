@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, CompanyEquipment, Review, Equipment, Client, Category
+from .models import Company, CompanyEquipment, Review, Equipment, Client, Category, Address
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,6 +20,10 @@ class CompanyEquipmentInline(admin.TabularInline):
     model = CompanyEquipment
     extra = 1
 
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    model = Address
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
