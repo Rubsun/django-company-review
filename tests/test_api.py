@@ -60,6 +60,6 @@ def create_apitest(model_class, model_url, creation_attrs):
 
 
 CompanyApiTest = create_apitest(Company, '/api/companies/',
-                                {'title': 'Test Company', 'phone': '123-456-7890', 'address': 'Test Address'})
-EquipmentApiTest = create_apitest(Equipment, '/api/equipments/', {'title': 'Test Equipment', 'size': 10})
-ReviewApiTest = create_apitest(Review, '/api/reviews/', {'text': 'Test Review', 'rating': 5})
+                                {'title': 'Test Company', 'phone': '123-456-7890'})
+EquipmentApiTest = create_apitest(Equipment, '/api/equipment/', {'title': 'Test Equipment', 'size': 10})
+ReviewApiTest = create_apitest(Review, '/api/review/', {'text': 'Test Review', 'rating': 5})

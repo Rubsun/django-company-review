@@ -67,11 +67,15 @@ def register(request):
 
 @login_required
 def profile_view(request):
-    client = Client.objects.get(user=request.user)
+    client = get_object_or_404(Client, user=request.user)
     reviews = Review.objects.filter(client=client)
+    companies = Company.objects.filter(client=client)
+    equipments = Equipment.objects.filter(client=client)
     context = {
         'client': client,
         'reviews': reviews,
+        'companies': companies,
+        'equipments': equipments,
     }
     return render(request, 'pages/profile.html', context)
 
@@ -86,7 +90,6 @@ def profile_view_by_id(request, user_id):
         'reviews': reviews,
     }
     return render(request, 'pages/profile.html', context)
-
 
 
 @login_required
@@ -120,7 +123,6 @@ def company_detail_view(request, company_id):
 def equipment_view(request, equipment_id):
     equipment = get_object_or_404(Equipment, id=equipment_id)
     reviews = equipment.reviews.select_related('client__user').all()
-
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -132,17 +134,17 @@ def equipment_view(request, equipment_id):
     else:
         form = ReviewForm()
 
-    companies = Company.objects.all()
+    all_companies = Company.objects.all()
+    associated_companies = equipment.companies.all()
+    unassociated_companies = all_companies.difference(associated_companies)
 
     context = {
         'equipment': equipment,
         'reviews': reviews,
         'form': form,
-        'companies': companies,
+        'companies': unassociated_companies,
     }
     return render(request, 'pages/equipment_details.html', context)
-
-
 
 
 @login_required
@@ -150,7 +152,9 @@ def create_company(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
-            company = form.save()
+            company = form.save(commit=False)
+            company.client = request.user.client
+            company.save()
             return redirect('company_detail', company.id)
     else:
         form = CompanyForm()
@@ -164,11 +168,12 @@ def create_equipment(request):
         if form.is_valid():
             equipment = form.save(commit=False)
             equipment.client = request.user.client
-            equipment = form.save()
+            equipment.save()
             return redirect('equipment_view', equipment.id)
     else:
         form = EquipmentForm()
     return render(request, 'pages/create_equipment.html', {'form': form})
+
 
 @login_required
 def add_equipment_to_company(request, equipment_id):
@@ -176,41 +181,58 @@ def add_equipment_to_company(request, equipment_id):
         equipment = get_object_or_404(Equipment, id=equipment_id)
         company_id = request.POST.get('company_id')
         company = get_object_or_404(Company, id=company_id)
-        
+
         if CompanyEquipment.objects.filter(equipment=equipment, company=company).exists():
             messages.warning(request, 'This equipment is already associated with the selected company.')
         else:
             CompanyEquipment.objects.create(equipment=equipment, company=company)
             messages.success(request, 'Equipment successfully added to the company.')
-        
+
         return redirect('equipment_view', equipment_id=equipment.id)
-    
+
     return redirect('equipment_view', equipment_id=equipment_id)
+
 
 @login_required
 def delete_equipment(request, equipment_id):
     equipment = get_object_or_404(Equipment, id=equipment_id)
-    if equipment.client != request.user:
+    next_url = request.GET.get('next', 'equipments')
+
+    if equipment.client != request.user.client and not request.user.is_superuser:
         messages.error(request, 'You do not have permission to delete this equipment.')
         return redirect('equipment_view', equipment_id=equipment_id)
-    
+
     if request.method == 'POST':
         equipment.delete()
         messages.success(request, 'Equipment deleted successfully.')
-        return redirect('equipments')
-    
-    return render(request, 'pages/equipment_details.html', {'equipment': equipment})
+        return redirect(next_url)
 
+    return render(request, 'pages/equipment_details.html', {'equipment': equipment})
 
 @login_required
 def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.client != request.user:
         messages.error(request, 'You do not have permission to delete this review.')
-        return redirect('profile')
-    
+
     if request.method == 'POST':
         review.delete()
         messages.success(request, 'Review deleted successfully.')
-    
+
     return redirect('profile')
+
+@login_required
+def delete_company(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+    next_url = request.GET.get('next', 'companies')
+
+    if company.client != request.user.client and not request.user.is_superuser:
+        messages.error(request, 'You do not have permission to delete this company.')
+        return redirect('company_detail', company_id=company_id)
+
+    if request.method == 'POST':
+        company.delete()
+        messages.success(request, 'Company deleted successfully.')
+        return redirect(next_url)
+
+    return render(request, 'pages/company_detail.html', {'company': company})

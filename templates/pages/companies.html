@@ -1,22 +1,32 @@
 {% extends "base_generic.html" %}
 {% block title %}
-	<title>Companies</title>
+    <title>Companies</title>
 {% endblock %}
 {% block content %}
-	
+
     <h1>Companies</h1>
     <ul>
         {% for company in companies %}
-        <li>
-            <p><strong>Title:</strong> {{ company.title }}</p>
-            <p><strong>Phone:</strong> {{ company.phone }}</p>
-            <p><strong>Address:</strong> {{ company.address }}</p>
-            <form method="get" action="{% url 'company_detail' company.id %}">
-                <button type="submit">View Details</button>
-            </form>
-        </li>
+            <li>
+                <p>Owner: <a
+                        href="{% url 'profile_by_id' company.client.user.id %}">{{ company.client.username }}</a>
+                </p>
+
+                <p><strong>Title:</strong> {{ company.title }}</p>
+                <p><strong>Phone:</strong> {{ company.phone }}</p>
+                <p><strong>Address:</strong> {{ company.address }}</p>
+                <form method="get" action="{% url 'company_detail' company.id %}">
+                    <button type="submit">View Details</button>
+                </form>
+                        {% if company.client.user == request.user or request.user.is_superuser %}
+                <form method="post" action="{% url 'delete_company' company.id %}?next={{ request.path }}">
+                    {% csrf_token %}
+                    <button type="submit">Delete Company</button>
+                </form>
+            {% endif %}
+            </li>
         {% empty %}
-        <li>No companies found.</li>
+            <li>No companies found.</li>
         {% endfor %}
     </ul>
 {% endblock %}

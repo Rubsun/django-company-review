@@ -6,21 +6,55 @@
 
 {% block content %}
     <h1>User Profile</h1>
-    <p><strong>Username:</strong> {{ client.username }}</p>
-    <p><strong>First Name:</strong> {{ client.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ client.last_name }}</p>
+    <p><strong>Username:</strong> {{ client.user.username }}</p>
+    <p><strong>First Name:</strong> {{ client.user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ client.user.last_name }}</p>
 
     <h2>Reviews:</h2>
     <ul>
         {% for review in reviews %}
             <li>{{ review.text }} - Rating: {{ review.rating }}</li>
-            <form method="get" action="{% url 'equipment_view' review.equipment_id %}">
+            <form method="get" action="{% url 'equipment_view' review.equipment.id %}">
                 <button type="submit">View Details</button>
             </form>
-            <form method="get" action="{% url 'delete_review' review.review_id %}">
-                <button type="submit">Delete</button>
+            {% if review.client.user == request.user %}
+                <form method="post" action="{% url 'delete_review' review.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Delete Review</button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <h2>Companies:</h2>
+    <ul>
+        {% for company in companies %}
+            <li>{{ company.title }}</li>
+            <form method="get" action="{% url 'company_detail' company.id %}">
+                <button type="submit">View Details</button>
             </form>
+            {% if company.client.user == request.user or request.user.is_superuser %}
+                <form method="post" action="{% url 'delete_company' company.id %}?next={{ request.path }}">
+                    {% csrf_token %}
+                    <button type="submit">Delete Company</button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <h2>Equipments:</h2>
+    <ul>
+        {% for equipment in equipments %}
+            <li>{{ equipment.title }}</li>
+            <form method="get" action="{% url 'equipment_view' equipment.id %}">
+                <button type="submit">View Details</button>
+            </form>
+            {% if equipment.client.user == request.user or request.user.is_superuser %}
+                <form method="post" action="{% url 'delete_equipment' equipment.id %}?next={{ request.path }}">
+                    {% csrf_token %}
+                    <button type="submit">Delete Equipment</button>
+                </form>
+            {% endif %}
         {% endfor %}
     </ul>
 {% endblock %}
-

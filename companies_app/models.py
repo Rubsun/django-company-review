@@ -65,6 +65,7 @@ class Company(UUIDMixin, CreatedMixin, ModifiedMixin):
     phone = models.TextField(_('phone'), null=False, blank=False, validators=[check_valid_phone])
     address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name=_('adress'), null=True, blank=True)
     equipments = models.ManyToManyField('Equipment', verbose_name=_('equipments'), through='CompanyEquipment')
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=True, blank=False)
 
     def __str__(self):
         return f'{self.title}: {self.phone} '
@@ -107,9 +108,9 @@ class Category(UUIDMixin, CreatedMixin, ModifiedMixin):
 class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False)
     size = models.IntegerField(_('size'), null=True, blank=True, validators=[MinValueValidator(0)])
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'), related_name='equipments')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'), related_name='equipments', null=True, blank=False)
     companies = models.ManyToManyField('Company', verbose_name=_('companies'), through='CompanyEquipment')
-    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=False, blank=False)
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=True, blank=False)
 
     def __str__(self):
         return f'{self.category}: {self.title}, {self.size}'
@@ -118,10 +119,9 @@ class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
         db_table = '"companies_schema"."equipment"'
         ordering = ['title', 'size']
         verbose_name = _('equipment')
-        verbose_name_plural = _('equipment')
+        verbose_name_plural = _('equipments')
 
-    def get_reviews(self):
-        return self.review_set.all()
+
 
 
 class Review(UUIDMixin, CreatedMixin, ModifiedMixin):
@@ -133,8 +133,8 @@ class Review(UUIDMixin, CreatedMixin, ModifiedMixin):
         null=False,
         blank=False)
 
-    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=False, blank=False)
-    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, null=False, blank=False, related_name='reviews')
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, null=True, blank=False)
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, null=True, blank=False, related_name='reviews')
 
     def __str__(self):
         return f'{self.text}: {self.rating}'

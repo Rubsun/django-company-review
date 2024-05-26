@@ -9,6 +9,7 @@
     <ul>
         {% for equipment in equipments %}
         <li>
+            <p>Owner: <a href="{% url 'profile_by_id' equipment.client.user.id %}">{{ equipment.client.username }}</a></p>
             <p><strong>Title:</strong> {{ equipment.title }}</p>
             <p><strong>Size:</strong> {{ equipment.size }}</p>
             <p><strong>Category:</strong> {{ equipment.category.title }}</p>
