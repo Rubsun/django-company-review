@@ -31,6 +31,6 @@ jobs:
     - name: Test api
       run: ./tests/test.sh tests.test_api
     - name: Test forms
-      run: ./tests/test.sh testing.test_forms
+      run: ./tests/test.sh tests.test_forms
     - name: Test CRUD
       run: ./tests/test.sh tests.test_CRUD
