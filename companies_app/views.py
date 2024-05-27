@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import permissions, viewsets
 from django.contrib import messages
-from .forms import RegistrationForm, ReviewForm, CompanyForm, EquipmentForm
+from .forms import RegistrationForm, ReviewForm, CompanyForm, EquipmentForm, AddressForm
 from .models import Company, Equipment, Review, Client, CompanyEquipment
 from .serializers import CompanySerializer, ReviewSerializer, EquipmentSerializer
 
@@ -150,15 +150,19 @@ def equipment_view(request, equipment_id):
 @login_required
 def create_company(request):
     if request.method == 'POST':
-        form = CompanyForm(request.POST)
-        if form.is_valid():
-            company = form.save(commit=False)
+        company_form = CompanyForm(request.POST)
+        address_form = AddressForm(request.POST)
+        if company_form.is_valid() and address_form.is_valid():
+            address = address_form.save()
+            company = company_form.save(commit=False)
             company.client = request.user.client
+            company.address = address
             company.save()
             return redirect('company_detail', company.id)
     else:
-        form = CompanyForm()
-    return render(request, 'pages/create_company.html', {'form': form})
+        company_form = CompanyForm()
+        address_form = AddressForm()
+    return render(request, 'pages/create_company.html', {'company_form': company_form, 'address_form': address_form})
 
 
 @login_required

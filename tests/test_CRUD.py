@@ -16,11 +16,13 @@ class ViewTests(TestCase):
         self.client_instance = Client.objects.create(user=self.user)
 
     def test_company_creation(self):
-
         company_data = {
             'title': 'Test Company',
-            'client_id': self.client_instance.id,
-            'phone': '123-456-7890'
+            'phone': '+79282037102',
+            'street_name': 'Test Street',
+            'city': 'Test City',
+            'state': 'Test State',
+            'house_number': '123'
         }
 
         response = self.client.post(reverse('create_company'), company_data)

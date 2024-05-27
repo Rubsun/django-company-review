@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 import re
 
+
+
 def get_datetime() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -80,7 +82,7 @@ class Address(CreatedMixin, ModifiedMixin, UUIDMixin):
     street_name = models.TextField(_('street name'), max_length=255, null=False, blank=False)
     city = models.TextField(_('city'), max_length=50, null=False, blank=False)
     state = models.TextField(_('state'), max_length=50, null=False, blank=False)
-    house_number = models.PositiveIntegerField(_('house number'), default=None, null=False, blank=False)
+    house_number = models.PositiveIntegerField(_('house number'), default=None, null=False, blank=False, validators=[MinValueValidator(1)])
 
     def __str__(self):
         return self.street_name
