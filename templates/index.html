@@ -1,19 +1,35 @@
 {% extends "base_generic.html" %}
 
 {% block title %}
-	<title>Homepage</title>
+    <title>Homepage</title>
 {% endblock %}
 
 {% block content %}
-    <h1>Home</h1>
-
-    <p>Welcome, Client!</p>
-
-    <h2>Now we have:</h2>
-    <ul>
-        <li><strong>Companies:</strong> {{ companies }}</li>
-        <li><strong>Equipment:</strong> {{ equipments }}</li>
-        <li><strong>Reviews:</strong> {{ reviews }}</li>
-    </ul>
-
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center">
+                    <h1 class="display-4 mb-4">Welcome to Our Application!</h1>
+                    <p class="lead">Explore the world of companies, equipment, and reviews.</p>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">What We Offer:</h2>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Companies:</strong> Discover a wide range of companies
+                                offering various services and products.
+                            </li>
+                            <li class="list-group-item"><strong>Equipment:</strong> Explore our extensive collection of
+                                high-quality equipment for different purposes.
+                            </li>
+                            <li class="list-group-item"><strong>Reviews:</strong> Read reviews from our community to
+                                make informed decisions about products and services.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-center">Start your journey now!</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

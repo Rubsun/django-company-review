@@ -5,12 +5,67 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Create a New Company</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ company_form.as_p }}
-        <h2>Address</h2>
-        {{ address_form.as_p }}
-        <button type="submit">Create Company</button>
-    </form>
+    {% load form_tags %}
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="row align-items-start">
+
+            <form method="post" class="w-100">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card p-3" style="width: 400px; height: 400px">
+                            <h1 class="text-center mb-3" style="font-size: 1.5rem;">Company Details</h1>
+                            {% if company_form.errors %}
+                                {% for key, value in company_form.errors.items %}
+                                    <div class="alert alert-danger">
+                                        {{ value }}
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            <div class="form-outline mb-3">
+                                {{ company_form.title|add_class:"form-control" }}
+                                <label class="form-label" for="{{ company_form.title.id_for_label }}">Title</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                {{ company_form.phone|add_class:"form-control" }}
+                                <label class="form-label" for="{{ company_form.phone.id_for_label }}">Phone</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-3" style="width: 400px; height: 400px">
+                            <h1 class="text-center mb-3" style="font-size: 1.5rem;">Address</h1>
+                            <div class="form-outline mb-3">
+                                {{ address_form.street_name|add_class:"form-control" }}
+                                <label class="form-label" for="{{ address_form.street_name.id_for_label }}">Street
+                                    Name</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                {{ address_form.city|add_class:"form-control" }}
+                                <label class="form-label" for="{{ address_form.city.id_for_label }}">City</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                {{ address_form.state|add_class:"form-control" }}
+                                <label class="form-label" for="{{ address_form.state.id_for_label }}">State</label>
+                            </div>
+                            <div class="form-outline mb-3">
+                                {{ address_form.house_number|add_class:"form-control" }}
+                                <label class="form-label" for="{{ address_form.house_number.id_for_label }}">House
+                                    Number</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row w-100">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Create Company</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

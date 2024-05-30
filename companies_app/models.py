@@ -1,12 +1,12 @@
+import re
+from datetime import datetime, timezone
+from uuid import uuid4
+
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from uuid import uuid4
-from datetime import datetime, timezone
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
-import re
-
 
 
 def get_datetime() -> datetime:
@@ -78,11 +78,13 @@ class Company(UUIDMixin, CreatedMixin, ModifiedMixin):
         verbose_name = _('company')
         verbose_name_plural = _('companies')
 
+
 class Address(CreatedMixin, ModifiedMixin, UUIDMixin):
     street_name = models.TextField(_('street name'), max_length=255, null=False, blank=False)
     city = models.TextField(_('city'), max_length=50, null=False, blank=False)
     state = models.TextField(_('state'), max_length=50, null=False, blank=False)
-    house_number = models.PositiveIntegerField(_('house number'), default=None, null=False, blank=False, validators=[MinValueValidator(1)])
+    house_number = models.PositiveIntegerField(_('house number'), default=None, null=False, blank=False,
+                                               validators=[MinValueValidator(1)])
 
     def __str__(self):
         return self.street_name
@@ -109,8 +111,9 @@ class Category(UUIDMixin, CreatedMixin, ModifiedMixin):
 
 class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False)
-    size = models.IntegerField(_('size'), null=True, blank=True, validators=[MinValueValidator(0)])
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'), related_name='equipments', null=True, blank=False)
+    size = models.IntegerField(_('size'), null=True, blank=True, validators=[MinValueValidator(1)])
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'),
+                                 related_name='equipments', null=True, blank=False)
     companies = models.ManyToManyField('Company', verbose_name=_('companies'), through='CompanyEquipment')
     client = models.ForeignKey('Client', on_delete=models.CASCADE, null=True, blank=False)
 
@@ -122,8 +125,6 @@ class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
         ordering = ['title', 'size']
         verbose_name = _('equipment')
         verbose_name_plural = _('equipments')
-
-
 
 
 class Review(UUIDMixin, CreatedMixin, ModifiedMixin):

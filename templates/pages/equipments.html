@@ -1,25 +1,26 @@
 {% extends "base_generic.html" %}
+
 {% block title %}
-	<title>Equipments</title>
+    <title>Equipments</title>
 {% endblock %}
 
 {% block content %}
-	
-    <h1>All Equipment</h1>
-    <ul>
+<div class="container">
+    <h1 class="text-center my-5">All Equipment</h1>
+    <ul class="list-group">
         {% for equipment in equipments %}
-        <li>
-            <p>Owner: <a href="{% url 'profile_by_id' equipment.client.user.id %}">{{ equipment.client.username }}</a></p>
-            <p><strong>Title:</strong> {{ equipment.title }}</p>
-            <p><strong>Size:</strong> {{ equipment.size }}</p>
-            <p><strong>Category:</strong> {{ equipment.category.title }}</p>
-            <form method="get" action="{% url 'equipment_view' equipment.id %}">
-                <button type="submit">View Details</button>
-            </form>
-        </li>
+            <li class="list-group-item mb-3">
+                <p><strong>Owner:</strong> <a href="{% url 'profile_by_id' equipment.client.user.id %}">{{ equipment.client.username }}</a></p>
+                <p><strong>Title:</strong> {{ equipment.title }}</p>
+                <p><strong>Size:</strong> {{ equipment.size }}</p>
+                <p><strong>Category:</strong> {{ equipment.category.title }}</p>
+                <form method="get" action="{% url 'equipment_view' equipment.id %}" class="d-inline-block">
+                    <button type="submit" class="btn btn-primary btn-sm">View Details</button>
+                </form>
+            </li>
         {% empty %}
-        <li>No equipment found.</li>
+            <li class="list-group-item">No equipment found.</li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}
-

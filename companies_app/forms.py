@@ -1,9 +1,7 @@
-from django.forms import CharField
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.forms import CharField
 
 from companies_app.models import Review, Company, Equipment, Address
 
@@ -30,18 +28,27 @@ class ReviewForm(forms.ModelForm):
 
 
 class CompanyForm(forms.ModelForm):
+    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Company
         fields = ['title', 'phone']
 
 
 class EquipmentForm(forms.ModelForm):
+    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Equipment
         fields = ['title', 'size', 'category']
 
 
 class AddressForm(forms.ModelForm):
+    street_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    city = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    state = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Address
         fields = ['street_name', 'city', 'state', 'house_number']

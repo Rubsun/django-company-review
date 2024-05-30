@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import permissions, viewsets
-from django.contrib import messages
+
 from .forms import RegistrationForm, ReviewForm, CompanyForm, EquipmentForm, AddressForm
 from .models import Company, Equipment, Review, Client, CompanyEquipment
 from .serializers import CompanySerializer, ReviewSerializer, EquipmentSerializer
@@ -213,17 +214,23 @@ def delete_equipment(request, equipment_id):
 
     return render(request, 'pages/equipment_details.html', {'equipment': equipment})
 
+
 @login_required
 def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-    if review.client != request.user:
+    next_url = request.GET.get('next', 'equipment_view')
+
+    if review.client.user != request.user and not request.user.is_superuser:
         messages.error(request, 'You do not have permission to delete this review.')
+        return redirect('equipment_view', equipment_id=review.equipment.id)
 
     if request.method == 'POST':
         review.delete()
         messages.success(request, 'Review deleted successfully.')
+        return redirect(next_url, equipment_id=review.equipment.id)
 
-    return redirect('profile')
+    return redirect('equipment_view', equipment_id=review.equipment.id)
+
 
 @login_required
 def delete_company(request, company_id):

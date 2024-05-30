@@ -5,10 +5,42 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Create Equipment</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Equipment</button>
-    </form>
+    {% load form_tags %}
+
+    <div class="container d-flex vh-100">
+        <div class="row justify-content-center align-self-center w-100">
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">Create Equipment</h2>
+                {% if form.errors %}
+                    {% for key, value in form.errors.items %}
+
+                        <div class="alert alert-danger">
+                            {{ value }}
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+                <form method="post" action="{% url 'create_equipment' %}">
+                    {% csrf_token %}
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        {{ form.title|add_class:"form-control" }}
+                        <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+                    </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        {{ form.size|add_class:"form-control" }}
+                        <label class="form-label" for="{{ form.size.id_for_label }}">Size</label>
+                    </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        {{ form.category|add_class:"form-control" }}
+                        <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init
+                                class="btn btn-primary btn-block mb-4 w-100 btn-lg">Create Equipment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

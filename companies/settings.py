@@ -1,13 +1,12 @@
-from dotenv import load_dotenv
-from os import getenv
-
+from os import getenv, path
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -20,10 +19,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'rest_framework.authtoken',
     'rest_framework',
     'companies_app',
@@ -45,7 +44,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
-
 
 MIDDLEWARE = [
     # 'django.middleware.locale.LocaleMiddleware',
@@ -79,26 +77,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'companies.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('PG_DBNAME'),
-        'USER': getenv('PG_USER'),
-        'PASSWORD': getenv('PG_PASSWORD'),
-        'HOST': getenv('PG_HOST'),
-        'PORT': getenv('PG_PORT'),
+        'NAME': getenv('POSTGRES_DB'),
+        'USER': getenv('POSTGRES_USER'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD'),
+        'HOST': getenv('POSTGRES_HOST'),
+        'PORT': getenv('POSTGRES_PORT'),
         'OPTIONS': {'options': '-c search_path=public,companies_schema'},
         'TEST': {
             'NAME': 'test_db',
         },
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -130,12 +124,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [
+    path.join(BASE_DIR, 'static'),
+]
 LOCALE_PATH = 'companies_app/locale'
 
 # Default primary key field type

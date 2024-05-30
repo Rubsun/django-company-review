@@ -1,28 +1,28 @@
 {% extends "base_generic.html" %}
 
 {% block title %}
-	<title>Company Details</title>
+    <title>Company Details</title>
 {% endblock %}
 
 {% block content %}
-	
-
-    <h1>Company Details</h1>
+<div class="container">
+    <h1 class="text-center my-5">Company Details</h1>
     <p><strong>Title:</strong> {{ company.title }}</p>
     <p><strong>Phone:</strong> {{ company.phone }}</p>
-    <p><strong>Address:</strong> {{ company.address.street_name }}   {{ company.address.house_number }}: {{ company.address.city}}</p>
+    <p><strong>Address:</strong> {{ company.address.street_name }} {{ company.address.house_number }}, {{ company.address.city }}</p>
 
     <h2>Equipments:</h2>
-    <ul>
+    <ul class="list-group">
         {% for equipment in company.equipments.all %}
-        <li>
-            {{ equipment.title }}
-            <form method="get" action="{% url 'equipment_view' equipment.id %}">
-                <button type="submit">View Equipment Details</button>
-            </form>
-        </li>
+            <li class="list-group-item mb-3">
+                {{ equipment.title }}
+                <form method="get" action="{% url 'equipment_view' equipment.id %}" class="d-inline-block">
+                    <button type="submit" class="btn btn-primary btn-sm">View Equipment Details</button>
+                </form>
+            </li>
         {% empty %}
-        <li>No equipments found.</li>
+            <li class="list-group-item">No equipments found.</li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}
