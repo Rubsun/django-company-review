@@ -16,6 +16,7 @@
         {% for equipment in company.equipments.all %}
             <li class="list-group-item mb-3">
                 {{ equipment.title }}
+                <br>
                 <form method="get" action="{% url 'equipment_view' equipment.id %}" class="d-inline-block">
                     <button type="submit" class="btn btn-primary btn-sm">View Equipment Details</button>
                 </form>
