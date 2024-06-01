@@ -1,18 +1,18 @@
 .navbar {
-    font-size: 1.5rem; /* Увеличение размера шрифта навигационной панели */
-    padding: 1rem; /* Увеличение внутреннего отступа для навигационной панели */
+    font-size: 1.5rem;
+    padding: 1rem;
     color: #FFFFFF;
 }
 
 .nav-link {
-    font-size: 1.5rem; /* Увеличение размера шрифта для ссылок */
+    font-size: 1.5rem;
     margin-right: 10px;
     color: #FFFFFF;
 }
 
 .btn-lg {
-    font-size: 1.25rem; /* Увеличение размера шрифта для кнопок */
-    padding: 0.75rem 1.25rem; /* Увеличение внутреннего отступа для кнопок */
+    font-size: 1.25rem;
+    padding: 0.75rem 1.25rem;
 
 }
 

@@ -7,7 +7,7 @@ from .permissions import APIPermission
 
 def create_view_set(model_class, serializer):
     """
-    Factory function to create custom ViewSets for Django REST Framework.
+    Create custom ViewSets for Django REST Framework.
 
     Args:
         model_class: Model class.
@@ -17,6 +17,8 @@ def create_view_set(model_class, serializer):
         class: Custom ViewSet class.
     """
     class CustomViewSet(viewsets.ModelViewSet):
+        """Custom ViewSets for Django REST Framework."""
+
         queryset = model_class.objects.all()
         serializer_class = serializer
         permission_classes = [APIPermission]

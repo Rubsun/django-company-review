@@ -1,5 +1,15 @@
+"""
+URL configuration for the companies application.
+
+Includes routes for:
+- Homepage
+- API endpoints for companies, equipment, and reviews
+- User registration, login, and logout
+- Profile viewing by user ID
+- Equipment and company management
+"""
 from django.contrib.auth import views as auth_views
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from . import views
@@ -24,8 +34,11 @@ urlpatterns = [
     path('company/<uuid:company_id>/', views.company_detail_view, name='company_detail'),
     path('create_company/', views.create_company, name='create_company'),
     path('create_equipment/', views.create_equipment, name='create_equipment'),
-    path('add_equipment_to_company/<uuid:equipment_id>/', views.add_equipment_to_company,
-         name='add_equipment_to_company'),
+    path(
+        'add_equipment_to_company/<uuid:equipment_id>/',
+        views.add_equipment_to_company,
+        name='add_equipment_to_company',
+    ),
     path('delete_review/<uuid:review_id>/', views.delete_review, name='delete_review'),
     path('delete_company/<uuid:company_id>/', views.delete_company, name='delete_company'),
 ]
