@@ -28,7 +28,19 @@ pip install -r req.txt
 docker run -d --name your_name -p your_port:5432 -e POSTGRES_PASSWORD=your_password -e POSTGRES_USER=your_user -e POSTGRES_DB=your_db  postgres
 ```
 
-### Step 4: Make migrations and migrate
+### Step 4: Create your .env
+```bash
+POSTGRES_DB=your_db
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_HOST=localhost
+
+POSTGRES_PORT=your_port
+DJANGO_PORT=8000
+SECRET_KEY=create_your_key
+```
+
+### Step 5: Make migrations and migrate
 ```bash
 python3 manage.py makemigrations
 python3 manage.py migrate
