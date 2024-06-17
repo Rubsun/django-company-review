@@ -63,7 +63,7 @@ class ModifiedMixin(models.Model):
 
 
 class Company(UUIDMixin, CreatedMixin, ModifiedMixin):
-    title = models.TextField(_('title'), null=False, blank=False)
+    title = models.TextField(_('title'), null=False, blank=False, max_length=50)
     phone = models.TextField(_('phone'), null=False, blank=False, validators=[check_valid_phone])
     address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name=_('adress'), null=True, blank=True)
     equipments = models.ManyToManyField('Equipment', verbose_name=_('equipments'), through='CompanyEquipment')
@@ -110,7 +110,7 @@ class Category(UUIDMixin, CreatedMixin, ModifiedMixin):
 
 
 class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
-    title = models.TextField(_('title'), null=False, blank=False)
+    title = models.TextField(_('title'), null=False, blank=False, max_length=50)
     size = models.IntegerField(_('size'), null=True, blank=True, validators=[MinValueValidator(1)])
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name=_('category'),
                                  related_name='equipments', null=True, blank=False)
@@ -128,7 +128,7 @@ class Equipment(UUIDMixin, CreatedMixin, ModifiedMixin):
 
 
 class Review(UUIDMixin, CreatedMixin, ModifiedMixin):
-    text = models.TextField(_('text'), null=False, blank=False)
+    text = models.TextField(_('text'), null=False, blank=False, max_length=500)
     rating = models.PositiveIntegerField(
         _('grade'),
         default=5,

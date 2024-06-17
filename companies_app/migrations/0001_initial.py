@@ -6,6 +6,10 @@ import django.db.models.deletion
 import uuid
 from django.conf import settings
 from django.db import migrations, models
+from django.core.management import call_command
+
+def create_companies_schema(apps, schema_editor):
+    call_command('create_schema')
 
 
 class Migration(migrations.Migration):
@@ -17,6 +21,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(create_companies_schema),
         migrations.CreateModel(
             name='Address',
             fields=[

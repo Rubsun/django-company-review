@@ -33,7 +33,17 @@
             {% endfor %}
         </ul>
 
+
         <h2>Write a Review:</h2>
+        {% if form.errors %}
+        {% for key, value in form.errors.items %}
+
+            <div class="alert alert-danger">
+                {{ value }}
+            </div>
+        {% endfor %}
+
+    {% endif %}
         <form method="post" action="{% url 'equipment_view' equipment.id %}" class="my-3">
             {% csrf_token %}
             <div class="form-outline mb-4">
