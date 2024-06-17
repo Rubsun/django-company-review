@@ -1,7 +1,7 @@
-# Django Happy Birthday
+# Django Company Review
 
 ## Description
-Django_Company-Review - This is a Django project designed to create companies and reviews.
+Django-Company-Review - This is a Django project designed to create companies and reviews.
 
 ## Requirements
 - Python 3.10

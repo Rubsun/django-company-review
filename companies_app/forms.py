@@ -85,7 +85,9 @@ class CompanyForm(forms.ModelForm):
     - phone: The phone number of the company.
     """
 
-    title = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={CLASS: FORM_CONTROL}))
+    title = forms.CharField(
+        required=True, max_length=50, widget=forms.TextInput(attrs={CLASS: FORM_CONTROL}),
+    )
     phone = forms.CharField(required=True, widget=forms.TextInput(attrs={CLASS: FORM_CONTROL}))
 
     class Meta:
@@ -105,7 +107,9 @@ class EquipmentForm(forms.ModelForm):
     - category: The category to which the equipment belongs.
     """
 
-    title = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={CLASS: FORM_CONTROL}))
+    title = forms.CharField(
+        required=True, max_length=50, widget=forms.TextInput(attrs={CLASS: FORM_CONTROL}),
+    )
 
     class Meta:
         """Meta."""

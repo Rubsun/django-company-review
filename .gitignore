@@ -1,6 +1,6 @@
-*.venv*
-/.idea/
-/.vscode/
-*__pycache__*
-*.coverage*
-*.env*
+.venv
+.idea
+.vscode
+__pycache__
+.coverage
+.env

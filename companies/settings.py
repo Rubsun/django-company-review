@@ -138,7 +138,5 @@ LOCALE_PATH = 'companies_app/locale'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TEST_RUNNER = 'tests.runner.PostgresSchemaRunner'
-
 LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_REDIRECT_URL = '/profile/'
